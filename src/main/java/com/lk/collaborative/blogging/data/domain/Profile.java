@@ -1,11 +1,7 @@
 package com.lk.collaborative.blogging.data.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import java.time.LocalDateTime;
@@ -14,9 +10,14 @@ import java.time.LocalDateTime;
 @Table(name = "profile")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Profile extends AbstractPersistable<Long> {
 
-    @OneToOne
+    public Profile(User user) {
+        this.user = user;
+    }
+
+    @OneToOne(optional = false)
     private User user;
 
     private LocalDateTime dateOfBirth;

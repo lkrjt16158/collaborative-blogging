@@ -1,4 +1,4 @@
-package com.lk.collaborative.blogging.data.repository;
+package com.lk.collaborative.blogging.data;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

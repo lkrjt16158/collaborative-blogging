@@ -28,7 +28,7 @@ public class User extends AbstractPersistable<Long> {
 
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

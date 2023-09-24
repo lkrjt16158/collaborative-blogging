@@ -1,11 +1,8 @@
-package com.lk.collaborative.blogging;
+package com.lk.collaborative.blogging.data;
 
 import com.lk.collaborative.blogging.data.domain.Password;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 public class PasswordIntegrationTest {
 
