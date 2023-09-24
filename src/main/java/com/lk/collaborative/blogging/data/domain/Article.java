@@ -5,8 +5,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.AbstractPersistable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,20 +22,18 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class Article extends AbstractPersistable<Long> {
 
     /**
      * @param url Unique url for the articlw
      * @param title Title
      * @param content Content
-     * @param creator
      */
-    public Article(String url, String title, String content, User creator ) {
+    public Article(String url, String title, String content ) {
         this.url = url;
         this.title = title;
         this.content = content;
-        this.creator = creator;
-        this.authors.add(creator);
     }
 
     @Column(unique = true, nullable = false)
@@ -46,9 +51,24 @@ public class Article extends AbstractPersistable<Long> {
         inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"))
     private final Set<User> authors = new HashSet<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @CreatedBy
     private User creator;
 
+    @ManyToOne
+    @LastModifiedBy
+    private User lastModifiedBy;
+
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+
+    @PrePersist
+    public void addCreatorAsAuthor() {
+        this.authors.add(creator);
+    }
 
     public void addAuthor(User author) {
         this.authors.add(author);

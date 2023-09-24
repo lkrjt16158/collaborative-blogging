@@ -8,16 +8,12 @@ import com.lk.collaborative.blogging.data.domain.User;
 import com.lk.collaborative.blogging.data.repository.ProfileRepository;
 import com.lk.collaborative.blogging.data.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.parameters.P;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -38,10 +34,14 @@ public class UserProfileRepositoryTests extends AbstractTest {
 
     @BeforeEach
     public void setUp() {
-        userRepository.deleteAll();
-        profileRepository.deleteAll();
         johnDoe = new User(SAMPLE_USER_NAME, "John", "Doe",
                 SAMPLE_USER_EMAIL, Password.of("test"));
+    }
+
+    @AfterEach
+    public void remove() {
+        profileRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
 
@@ -81,7 +81,7 @@ public class UserProfileRepositoryTests extends AbstractTest {
 
 
     /**
-     * Test to validate if Profile is loaded upon calling user.getProfile() method.
+     * Test to validate if Profile is loaded upon calling {@link User#getProfile()} method.
      * It will fail if annotated with {@Transactional} at method or class level.
      */
     @Test
