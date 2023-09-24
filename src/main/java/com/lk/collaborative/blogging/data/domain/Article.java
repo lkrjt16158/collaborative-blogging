@@ -17,10 +17,18 @@ import java.util.Set;
 @Setter
 public class Article extends AbstractPersistable<Long> {
 
-    public Article(String url, String title, String content ) {
+    /**
+     * @param url Unique url for the articlw
+     * @param title Title
+     * @param content Content
+     * @param creator
+     */
+    public Article(String url, String title, String content, User creator ) {
         this.url = url;
         this.title = title;
         this.content = content;
+        this.creator = creator;
+        this.authors.add(creator);
     }
 
     @Column(unique = true, nullable = false)
@@ -41,11 +49,6 @@ public class Article extends AbstractPersistable<Long> {
     @ManyToOne(optional = false)
     private User creator;
 
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-        this.authors.add(creator);
-    }
 
     public void addAuthor(User author) {
         this.authors.add(author);

@@ -12,6 +12,16 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends AbstractPersistable<Long> {
 
+
+    /**
+     * Constructor to construct a new User by passing essential fields.
+     *
+     * @param userName A unique identifier of the user. Representation of {@link User} on the platform.
+     * @param firstName First name.
+     * @param lastName Last name.
+     * @param email Unique email.
+     * @param password encrypted password. see {@link Password}
+     */
     public User(String userName, String firstName, String lastName, String email, Password password) {
         this.userName = userName;
         this.firstName = firstName;

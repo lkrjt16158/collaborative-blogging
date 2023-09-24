@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Class representing user password.
+ * It can be initialized only by calling static {@link Password#of(String)} method.
+ * Any access to encrypted password is strictly prohibited.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Password {
 

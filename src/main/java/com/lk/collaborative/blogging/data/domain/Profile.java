@@ -6,6 +6,9 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import java.time.LocalDateTime;
 
+/**
+ *  User Profile Entity
+ */
 @Entity
 @Table(name = "profile")
 @Getter
@@ -13,6 +16,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Profile extends AbstractPersistable<Long> {
 
+    /**
+     * @param user {@link User}
+     */
     public Profile(User user) {
         this.user = user;
     }
