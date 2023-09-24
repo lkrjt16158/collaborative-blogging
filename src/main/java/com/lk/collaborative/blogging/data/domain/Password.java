@@ -4,6 +4,7 @@ import jakarta.persistence.AttributeConverter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,7 +22,6 @@ public class Password {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @Getter(value = AccessLevel.PRIVATE)
     private String encryptedPassword;
 
     public static Password of(String rawPassword) {
