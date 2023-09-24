@@ -1,10 +1,7 @@
 package com.lk.collaborative.blogging.data.domain;
 
 import jakarta.persistence.AttributeConverter;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -24,7 +21,7 @@ public class Password {
 
     private String encryptedPassword;
 
-    public static Password of(String rawPassword) {
+    public static Password of(@NonNull String rawPassword) {
         return new Password(encryptPassword(rawPassword));
     }
 
@@ -33,7 +30,7 @@ public class Password {
         return passwordEncoder.encode(password);
     }
 
-    public boolean matches(String password) {
+    public boolean matches(@NonNull String password) {
         return passwordEncoder.matches(password, encryptedPassword);
     }
 

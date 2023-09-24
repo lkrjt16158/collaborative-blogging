@@ -45,6 +45,9 @@ public class Article extends AbstractPersistable<Long> {
     @Column(nullable = false)
     private String content;
 
+    @Column(name = "status", nullable = false)
+    private ArticleStatus articleStatus = ArticleStatus.DRAFT;
+
     @ManyToMany(targetEntity = User.class)
     @JoinTable(name = "ARTICLE_AUTHOR",
         joinColumns = @JoinColumn(name = "ARTICLE_ID", referencedColumnName = "ID"),
@@ -64,6 +67,8 @@ public class Article extends AbstractPersistable<Long> {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+
+    private LocalDateTime publishedDate;
 
     @PrePersist
     public void addCreatorAsAuthor() {

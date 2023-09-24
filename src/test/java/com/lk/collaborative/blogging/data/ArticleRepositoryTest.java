@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 class ArticleRepositoryTest extends AbstractTest {
 
     private User creator;
+    private User gandalf;
+    private Article article;
 
     @Autowired
     UserRepository userRepository;
@@ -31,9 +33,18 @@ class ArticleRepositoryTest extends AbstractTest {
     @BeforeEach
     public void setup() {
         creator = new User("john.doe", "John", "Doe", "john.doe@email.com", Password.of("test"));
+        gandalf = new User("gandalf.grey", "Gandalf", "Grey","gandalf.grey@email.com", Password.of("YouShallNotPass"));
+        article = new Article("/abc", "ABC", "ABC");
+
+        //add creator
+        creator = userRepository.save(creator);
 
         //Set creator as the authenticated user
         setUpSecurityContext(creator);
+
+        //add article
+        article = articleRepository.save(article);
+
     }
 
     @AfterEach
@@ -44,9 +55,6 @@ class ArticleRepositoryTest extends AbstractTest {
 
     @Test
     public void saveArticle() {
-        creator = userRepository.save(creator);
-        Article article = new Article("/abc", "ABC", "ABC");
-        article = articleRepository.save(article);
         Assertions.assertNotNull(article);
         Assertions.assertNotNull(article.getId());
 
@@ -70,23 +78,14 @@ class ArticleRepositoryTest extends AbstractTest {
 
     @Test
     public void updateArticle() {
-        //add creator
-        userRepository.save(creator);
 
-        User newUser = new User("gandalf.grey", "Gandalf", "Grey","gandalf.grey@email.com", Password.of("YouShallNotPass"));
-        newUser = userRepository.save(newUser);
-
-        //add article
-        Article article = new Article("/abc", "ABC", "ABC");
-        article = articleRepository.save(article);
-        Assertions.assertNotNull(article);
-        Assertions.assertNotNull(article.getId());
+        gandalf = userRepository.save(gandalf);
 
         LocalDateTime currentModifiedDate = article.getLastModifiedDate();
         LocalDateTime currentCreateDate = article.getCreatedDate();
 
         //Set newUser as the currentUser instead of creator
-        setUpSecurityContext(newUser);
+        setUpSecurityContext(gandalf);
 
         //update article
         article.setContent("Changed content");
@@ -95,12 +94,24 @@ class ArticleRepositoryTest extends AbstractTest {
         //Checks if creator is still the creator
         Assertions.assertEquals(creator, article.getCreator());
         //Checks if last modified by is set to the new user
-        Assertions.assertEquals(newUser, article.getLastModifiedBy());
+        Assertions.assertEquals(gandalf, article.getLastModifiedBy());
 
         //Check if last modified date is updated
         Assertions.assertTrue(article.getLastModifiedDate().isAfter(currentModifiedDate));
 
         Assertions.assertTrue(article.getCreatedDate().isEqual(currentCreateDate));
+
+    }
+
+    @Test
+    public void addAuthor() {
+        Assertions.assertEquals(article.getAuthors().size(), 1);
+        gandalf = userRepository.save(gandalf);
+        article.addAuthor(gandalf);
+        article = articleRepository.save(article);
+        Assertions.assertEquals(2, article.getAuthors().size());
+        Assertions.assertTrue(article.getAuthors().contains(creator));
+        Assertions.assertTrue(article.getAuthors().contains(gandalf));
 
     }
 
