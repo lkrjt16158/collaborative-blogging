@@ -27,8 +27,8 @@ public class UserProfileRepositoryTests extends AbstractTest {
     @Autowired
     ProfileRepository profileRepository;
 
-    private static final String SAMPLE_USER_NAME = "john.doe";
-    private static final String SAMPLE_USER_EMAIL = "john.doe@test.com";
+    private static final String SAMPLE_USER_NAME = "John.doe";
+    private static final String SAMPLE_USER_EMAIL = "joHn.doe@test.com";
     private  User johnDoe = null;
 
 
@@ -44,21 +44,33 @@ public class UserProfileRepositoryTests extends AbstractTest {
         userRepository.deleteAll();
     }
 
+    @Test
+    public void checksIfUserNameAndEmailAreSavedInLowerCase() {
+        johnDoe = userRepository.save(johnDoe);
+        Assertions.assertEquals(johnDoe.getEmail(), SAMPLE_USER_EMAIL.toLowerCase());
+        Assertions.assertEquals(johnDoe.getUserName(), SAMPLE_USER_NAME.toLowerCase());
+    }
 
     @Test
     public void findByUserName() {
         johnDoe = userRepository.save(johnDoe);
-        Optional<User> user = userRepository.findByUserName(SAMPLE_USER_NAME);
+        Optional<User> user = userRepository.findByUserNameIgnoreCase(SAMPLE_USER_NAME);
         Assertions.assertTrue(user.isPresent());
-        Assertions.assertEquals(user.get().getUserName(), SAMPLE_USER_NAME);
+
+        //Should return empty optional
+        Optional<User> nonExistingUser = userRepository.findByUserNameIgnoreCase("gandalf.grey");
+        Assertions.assertTrue(nonExistingUser.isEmpty());
     }
 
     @Test
     public void findByEmail() {
         johnDoe = userRepository.save(johnDoe);
-        Optional<User> user = userRepository.findByEmail(SAMPLE_USER_EMAIL);
+        Optional<User> user = userRepository.findByEmailIgnoreCase(SAMPLE_USER_EMAIL);
         Assertions.assertTrue(user.isPresent());
-        Assertions.assertEquals(user.get().getEmail(), SAMPLE_USER_EMAIL);
+
+        //Should return empty optional
+        Optional<User> nonExistingUser = userRepository.findByEmailIgnoreCase("gandalf.grey@email.com");
+        Assertions.assertTrue(nonExistingUser.isEmpty());
     }
 
     @Test

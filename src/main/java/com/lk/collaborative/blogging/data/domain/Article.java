@@ -71,7 +71,7 @@ public class Article extends AbstractPersistable<Long> {
     private LocalDateTime publishedDate;
 
     @PrePersist
-    public void addCreatorAsAuthor() {
+    protected void addCreatorAsAuthor() {
         this.authors.add(creator);
     }
 

@@ -51,4 +51,14 @@ public class User extends AbstractPersistable<Long> {
     private Profile profile;
 
 
+    /**
+     * To prevent duplication of unique fields
+     */
+    @PrePersist
+    protected void makeFieldsLowerCase() {
+        this.userName = userName.toLowerCase();
+        this.email = email.toLowerCase();
+    }
+
+
 }

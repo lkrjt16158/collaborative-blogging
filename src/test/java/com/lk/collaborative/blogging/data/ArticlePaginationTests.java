@@ -83,7 +83,7 @@ public class ArticlePaginationTests extends AbstractTest {
 
     @Test
     public void findArticlesByUser() {
-        User user = userRepository.findByUserName("user-name-0").get();
+        User user = userRepository.findByUserNameIgnoreCase("user-name-0").get();
         Page<Article> articles = articleRepository.findArticlesByTitleAndUser(
                 "",
                 user,
@@ -93,7 +93,7 @@ public class ArticlePaginationTests extends AbstractTest {
 
     @Test
     public void fetchMyArticles() {
-        User user = userRepository.findByUserName("user-name-0").get();
+        User user = userRepository.findByUserNameIgnoreCase("user-name-0").get();
         Page<Article> articles = articleRepository.findMyArticlesByTitle(
                 "",
                 user,
