@@ -1,9 +1,8 @@
 package com.lk.collaborative.blogging.service.util;
 
+import com.lk.collaborative.blogging.util.ExceptionMessageUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ExceptionMessageUtilsTest {
 

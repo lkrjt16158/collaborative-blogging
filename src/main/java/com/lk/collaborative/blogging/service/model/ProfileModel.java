@@ -20,9 +20,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProfileModel {
 
-    @NotBlank
-    private String userName;
-
     private LocalDateTime dateOfBirth;
 
     private Gender gender;

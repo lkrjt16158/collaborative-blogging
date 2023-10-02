@@ -10,11 +10,10 @@ import com.lk.collaborative.blogging.service.exception.UserAlreadyExistsExceptio
 import com.lk.collaborative.blogging.service.exception.UserNotFoundException;
 import com.lk.collaborative.blogging.service.model.ProfileModel;
 import com.lk.collaborative.blogging.service.model.UserSignUpModel;
-import com.lk.collaborative.blogging.service.util.ExceptionMessageUtils;
+import com.lk.collaborative.blogging.util.AuthenticationUtil;
+import com.lk.collaborative.blogging.util.ExceptionMessageUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -60,12 +59,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Profile updateProfile(ProfileModel profileModel) {
-        String userName = profileModel.getUserName();
-        User user = userRepository.findByUserNameIgnoreCase(userName)
-                .orElseThrow( () -> new UserNotFoundException(ExceptionMessageUtils.userNotFoundByUserName(userName)));
+        User user = AuthenticationUtil.getAuthenticatedUser();
 
         Profile profile = user.getProfile();
-
         //Update profile
         profile.setCountryCode(profile.getCountryCode());
         profile.setGender(profileModel.getGender());

@@ -1,4 +1,4 @@
-package com.lk.collaborative.blogging.service.util;
+package com.lk.collaborative.blogging.util;
 
 public class ExceptionMessageUtils {
     private ExceptionMessageUtils(){}
@@ -10,7 +10,8 @@ public class ExceptionMessageUtils {
         return String.format("User with email '%s' already exists", email);
     }
 
-    public static String userNotFoundByUserName(String userName) {
-        return String.format("User not found with username %s. ", userName);
+    public static String unauthenticatedUser() {
+        return "User is not authenticated";
     }
+
 }
