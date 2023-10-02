@@ -7,10 +7,14 @@ import com.lk.collaborative.blogging.data.repository.ProfileRepository;
 import com.lk.collaborative.blogging.data.repository.UserRepository;
 import com.lk.collaborative.blogging.service.UserService;
 import com.lk.collaborative.blogging.service.exception.UserAlreadyExistsException;
+import com.lk.collaborative.blogging.service.exception.UserNotFoundException;
+import com.lk.collaborative.blogging.service.model.ProfileModel;
 import com.lk.collaborative.blogging.service.model.UserSignUpModel;
 import com.lk.collaborative.blogging.service.util.ExceptionMessageUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -52,6 +56,22 @@ public class UserServiceImpl implements UserService {
         Profile profile = new Profile(user);
         profileRepository.save(profile);
         return user;
+    }
+
+    @Override
+    public Profile updateProfile(ProfileModel profileModel) {
+        String userName = profileModel.getUserName();
+        User user = userRepository.findByUserNameIgnoreCase(userName)
+                .orElseThrow( () -> new UserNotFoundException(ExceptionMessageUtils.userNotFoundByUserName(userName)));
+
+        Profile profile = user.getProfile();
+
+        //Update profile
+        profile.setCountryCode(profile.getCountryCode());
+        profile.setGender(profileModel.getGender());
+        profile.setPhoneNumber(profile.getPhoneNumber());
+        profile.setDateOfBirth(profile.getDateOfBirth());
+        return profileRepository.save(profile);
     }
 
 

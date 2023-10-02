@@ -48,6 +48,7 @@ public class User extends AbstractPersistable<Long> {
 
     @OneToOne(mappedBy = "user")
     @Setter(value = AccessLevel.PRIVATE)
+    @JsonIgnore
     private Profile profile;
 
 
