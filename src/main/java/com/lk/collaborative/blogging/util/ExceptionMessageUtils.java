@@ -14,4 +14,8 @@ public class ExceptionMessageUtils {
         return "User is not authenticated";
     }
 
+    public static String articleNotFound(String url) {
+        return String.format("No article exists with identifier: %s. ", url);
+    }
+
 }

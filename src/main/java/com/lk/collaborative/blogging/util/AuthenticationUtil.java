@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AuthenticationUtil {
     private AuthenticationUtil() {}
-    public static User getAuthenticatedUser() {
+    public static User getAuthenticatedUser() throws AnonymousUserException {
         Object authenticatedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!(authenticatedUser instanceof User)){
             throw new AnonymousUserException(ExceptionMessageUtils.unauthenticatedUser());

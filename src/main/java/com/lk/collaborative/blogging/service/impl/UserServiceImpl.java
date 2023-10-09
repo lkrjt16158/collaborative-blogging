@@ -6,6 +6,8 @@ import com.lk.collaborative.blogging.data.domain.User;
 import com.lk.collaborative.blogging.data.repository.ProfileRepository;
 import com.lk.collaborative.blogging.data.repository.UserRepository;
 import com.lk.collaborative.blogging.service.UserService;
+import com.lk.collaborative.blogging.service.exception.AnonymousUserException;
+import com.lk.collaborative.blogging.service.exception.UnauthorizedAccessException;
 import com.lk.collaborative.blogging.service.exception.UserAlreadyExistsException;
 import com.lk.collaborative.blogging.service.exception.UserNotFoundException;
 import com.lk.collaborative.blogging.service.model.ProfileModel;
@@ -59,7 +61,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Profile updateProfile(ProfileModel profileModel) {
-        User user = AuthenticationUtil.getAuthenticatedUser();
+        User user = null;
+        try {
+            user = AuthenticationUtil.getAuthenticatedUser();
+        } catch (AnonymousUserException e) {
+            throw new UnauthorizedAccessException(e);
+        }
+
+        //TODO: Check if user has permission to update profile
 
         Profile profile = user.getProfile();
         //Update profile

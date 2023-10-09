@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
+import java.util.Optional;
+
 public interface ArticleRepository extends ListCrudRepository<Article, Long> {
 
     String SELECT_QUERY = "Select a from Article a";
@@ -52,4 +54,10 @@ public interface ArticleRepository extends ListCrudRepository<Article, Long> {
     @Query(SELECT_QUERY + JOIN_WITH_USER  + WHERE + COMPARE_FOR_TITLE + AND + COMPARE_FOR_USER + ORDER_BY_PUBLISHED_DATE)
     Page<Article> findMyArticlesByTitle(@NonNull String title, @NonNull User user, Pageable pageable);
 
+
+    /**
+     * @param url url of the article
+     * @return Article if exists with the given url or an empty optional
+     */
+    Optional<Article> findByUrl(@NonNull String url);
 }
