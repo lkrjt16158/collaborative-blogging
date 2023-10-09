@@ -18,4 +18,8 @@ public class ExceptionMessageUtils {
         return String.format("No article exists with identifier: %s. ", url);
     }
 
+    public static String unauthorizedArticleAccess(String url) {
+        return String.format("User is not authorized to perform action on the article: %s .", url);
+    }
+
 }
