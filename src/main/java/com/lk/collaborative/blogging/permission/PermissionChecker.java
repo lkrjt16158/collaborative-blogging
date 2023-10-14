@@ -1,17 +1,14 @@
-package com.lk.collaborative.blogging.service.permission;
+package com.lk.collaborative.blogging.permission;
 
 import com.lk.collaborative.blogging.data.domain.User;
 import com.lk.collaborative.blogging.service.exception.AnonymousUserException;
 import com.lk.collaborative.blogging.util.AuthenticationUtil;
 
 
-/**
- * @param <T> Enum representing an action on resource.
- * @param <E> Object representing a resource.
- */
-public abstract class Resource<T extends Enum<?>,E> {
 
-     protected abstract boolean hasPermission(T action, E object, User user);
+public abstract class PermissionChecker<T extends Enum<?>, Resource> {
+
+     protected abstract boolean hasPermission(T action, Resource object, User user);
 
      /**
       * Checks if the authenticated user has permission to perform given action on object.
@@ -22,7 +19,7 @@ public abstract class Resource<T extends Enum<?>,E> {
       * @throws AnonymousUserException if the user is unauthenticated.
       *
       */
-      public boolean hasPermission(T action, E object) throws AnonymousUserException {
+      public boolean hasPermission(T action, Resource object) throws AnonymousUserException {
           return hasPermission(action, object, AuthenticationUtil.getAuthenticatedUser());
      }
 }

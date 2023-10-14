@@ -1,5 +1,6 @@
 package com.lk.collaborative.blogging.data.domain;
 
+import com.lk.collaborative.blogging.permission.Resource;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,7 +24,7 @@ import java.util.Set;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class Article extends AbstractPersistable<Long> {
+public class Article extends AbstractPersistable<Long> implements Resource {
 
     /**
      * @param url Unique url for the articlw
@@ -78,6 +79,5 @@ public class Article extends AbstractPersistable<Long> {
     public void addAuthor(User author) {
         this.authors.add(author);
     }
-
 
 }

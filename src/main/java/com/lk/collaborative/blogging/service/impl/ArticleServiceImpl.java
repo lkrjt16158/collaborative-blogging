@@ -2,6 +2,8 @@ package com.lk.collaborative.blogging.service.impl;
 
 import com.lk.collaborative.blogging.data.domain.Article;
 import com.lk.collaborative.blogging.data.domain.ArticleStatus;
+import com.lk.collaborative.blogging.data.permission.ArticleAction;
+import com.lk.collaborative.blogging.data.permission.ArticlePermissionChecker;
 import com.lk.collaborative.blogging.data.repository.ArticleRepository;
 import com.lk.collaborative.blogging.service.ArticleService;
 import com.lk.collaborative.blogging.service.exception.AnonymousUserException;
@@ -10,8 +12,6 @@ import com.lk.collaborative.blogging.service.exception.UnauthorizedAccessExcepti
 import com.lk.collaborative.blogging.service.model.AddArticleModel;
 import com.lk.collaborative.blogging.service.model.ArticleModel;
 import com.lk.collaborative.blogging.service.model.UpdateArticleModel;
-import com.lk.collaborative.blogging.service.permission.ArticleResource;
-import com.lk.collaborative.blogging.service.permission.action.ArticleAction;
 import com.lk.collaborative.blogging.util.ExceptionMessageUtils;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +21,11 @@ import java.time.Instant;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final ArticleResource articleResource;
+    private final ArticlePermissionChecker permissionChecker;
 
-    public ArticleServiceImpl(ArticleRepository articleRepository, ArticleResource articleResource) {
+    public ArticleServiceImpl(ArticleRepository articleRepository, ArticlePermissionChecker permissionChecker) {
         this.articleRepository = articleRepository;
-        this.articleResource = articleResource;
+        this.permissionChecker = permissionChecker;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         //permission check
         try {
-            if(!articleResource.hasPermission(ArticleAction.UPDATE_ARTICLE, article)) {
+            if(!permissionChecker.hasPermission(ArticleAction.UPDATE_ARTICLE, article)) {
                 throw new UnauthorizedAccessException(ExceptionMessageUtils.unauthorizedArticleAccess(url));
             }
         }catch (AnonymousUserException e) {
@@ -63,7 +63,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         //permission check
         try {
-            if(!articleResource.hasPermission(ArticleAction.PUBLISH_ARTICLE, article)) {
+            if(!permissionChecker.hasPermission(ArticleAction.PUBLISH_ARTICLE, article)) {
                 throw new UnauthorizedAccessException(ExceptionMessageUtils.unauthorizedArticleAccess(url));
             }
         }catch (AnonymousUserException e) {
@@ -81,7 +81,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         //permission check
         try {
-            if(!articleResource.hasPermission(ArticleAction.DELETE_ARTICLE, article)) {
+            if(!permissionChecker.hasPermission(ArticleAction.DELETE_ARTICLE, article)) {
                 throw new UnauthorizedAccessException(ExceptionMessageUtils.unauthorizedArticleAccess(url));
             }
         }catch (AnonymousUserException e) {

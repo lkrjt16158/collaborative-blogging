@@ -1,17 +1,18 @@
-package com.lk.collaborative.blogging.service.permission;
+package com.lk.collaborative.blogging.data.permission;
 
 import com.lk.collaborative.blogging.data.domain.Article;
 import com.lk.collaborative.blogging.data.domain.User;
-import com.lk.collaborative.blogging.service.permission.action.ArticleAction;
+import com.lk.collaborative.blogging.data.permission.ArticleAction;
+import com.lk.collaborative.blogging.permission.PermissionChecker;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 /**
- * Article as protected resource.
+ * Contains permission related details for the articles.
  */
 @Service
-public class ArticleResource extends Resource<ArticleAction, Article> {
+public class ArticlePermissionChecker extends PermissionChecker<ArticleAction, Article> {
 
     @Override
     protected boolean hasPermission(ArticleAction action, Article article, User loggedInUser) {
