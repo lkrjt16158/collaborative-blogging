@@ -16,22 +16,19 @@ public class ArticlePermissionChecker extends PermissionChecker<ArticleAction, A
 
     @Override
     protected boolean hasPermission(ArticleAction action, Article article, User loggedInUser) {
-        Set<User> authors = article.getAuthors();
         switch (action) {
             case ADD_ARTICLE -> {
                 return true;
             }
             case UPDATE_ARTICLE -> {
-                return authors.contains(loggedInUser);
+                return article.getAuthors().contains(loggedInUser);
             }
-            case DELETE_ARTICLE -> {}
-            case PUBLISH_ARTICLE  -> {
+            case DELETE_ARTICLE, PUBLISH_ARTICLE  -> {
                 return article.getCreator().equals(loggedInUser);
             }
             default -> {
                 return false;
             }
         }
-        return false;
     }
 }

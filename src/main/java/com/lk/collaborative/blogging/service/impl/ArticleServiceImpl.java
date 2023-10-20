@@ -7,6 +7,7 @@ import com.lk.collaborative.blogging.data.permission.ArticlePermissionChecker;
 import com.lk.collaborative.blogging.data.repository.ArticleRepository;
 import com.lk.collaborative.blogging.service.ArticleService;
 import com.lk.collaborative.blogging.service.exception.AnonymousUserException;
+import com.lk.collaborative.blogging.service.exception.ArticleAlreadyPublishedException;
 import com.lk.collaborative.blogging.service.exception.ArticleNotFoundException;
 import com.lk.collaborative.blogging.service.exception.UnauthorizedAccessException;
 import com.lk.collaborative.blogging.service.model.AddArticleModel;
@@ -55,6 +56,9 @@ public class ArticleServiceImpl implements ArticleService {
     public Article publishArticle(ArticleModel articleModel) {
         String url = articleModel.getUrl();
         Article article = findArticleOrThrowException(url);
+        if(article.getArticleStatus().equals(ArticleStatus.PUBLISHED)) {
+            throw new ArticleAlreadyPublishedException(ExceptionMessageUtils.articleAlreadyPublished(url));
+        }
 
         //permission check
         validatePermission(ArticleAction.PUBLISH_ARTICLE, article);

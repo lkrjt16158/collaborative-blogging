@@ -57,6 +57,7 @@ public class Article extends AbstractPersistable<Long> implements Resource {
 
     @ManyToOne
     @CreatedBy
+    @Setter(value = AccessLevel.PRIVATE)
     private User creator;
 
     @ManyToOne

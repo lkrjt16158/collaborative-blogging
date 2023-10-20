@@ -22,4 +22,7 @@ public class ExceptionMessageUtils {
         return String.format("User is not authorized to perform action on the article: %s .", url);
     }
 
+    public static String articleAlreadyPublished(String url) {
+        return String.format("Article %s is already published.", url);
+    }
 }
