@@ -30,6 +30,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article addArticle(AddArticleModel articleModel) {
+        validatePermission(ArticleAction.ADD_ARTICLE, null);
         String title = articleModel.getTitle();
         String url = generateUrlFromTitle(title);
         Article article = new Article(url, title, articleModel.getContent());
@@ -42,13 +43,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = findArticleOrThrowException(url);
 
         //permission check
-        try {
-            if(!permissionChecker.hasPermission(ArticleAction.UPDATE_ARTICLE, article)) {
-                throw new UnauthorizedAccessException(ExceptionMessageUtils.unauthorizedArticleAccess(url));
-            }
-        }catch (AnonymousUserException e) {
-            throw new UnauthorizedAccessException(e);
-        }
+        validatePermission(ArticleAction.UPDATE_ARTICLE, article);
 
         article.setTitle(updateArticleModel.getTitle());
         article.setContent(updateArticleModel.getContent());
@@ -62,13 +57,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = findArticleOrThrowException(url);
 
         //permission check
-        try {
-            if(!permissionChecker.hasPermission(ArticleAction.PUBLISH_ARTICLE, article)) {
-                throw new UnauthorizedAccessException(ExceptionMessageUtils.unauthorizedArticleAccess(url));
-            }
-        }catch (AnonymousUserException e) {
-            throw new UnauthorizedAccessException(e);
-        }
+        validatePermission(ArticleAction.PUBLISH_ARTICLE, article);
 
         article.setArticleStatus(ArticleStatus.PUBLISHED);
         return articleRepository.save(article);
@@ -80,13 +69,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = findArticleOrThrowException(url);
 
         //permission check
-        try {
-            if(!permissionChecker.hasPermission(ArticleAction.DELETE_ARTICLE, article)) {
-                throw new UnauthorizedAccessException(ExceptionMessageUtils.unauthorizedArticleAccess(url));
-            }
-        }catch (AnonymousUserException e) {
-            throw new UnauthorizedAccessException(e);
-        }
+        validatePermission(ArticleAction.DELETE_ARTICLE, article);
         articleRepository.delete(article);
     }
 
@@ -108,5 +91,19 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository
                 .findByUrl(url)
                 .orElseThrow(() -> new ArticleNotFoundException(ExceptionMessageUtils.articleNotFound(url)));
+    }
+
+    private void validatePermission(ArticleAction action, Article article){
+        String url = null;
+        if(article != null)
+            url = article.getUrl();
+
+        try {
+            if(!permissionChecker.hasPermission(action, article)) {
+                throw new UnauthorizedAccessException(ExceptionMessageUtils.unauthorizedArticleAccess(url));
+            }
+        }catch (AnonymousUserException e) {
+            throw new UnauthorizedAccessException(e);
+        }
     }
 }
